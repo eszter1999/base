@@ -1,5 +1,6 @@
 package hu.bme.mit.train.sensor;
 
+import hu.bme.mit.train.interfaces.TrainSensor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,13 +8,15 @@ import static org.mockito.Mockito.*;
 
 public class TrainSensorTest {
 
+    TrainSensor sensor;
+
     @Before
     public void before() {
-        // TODO Add initializations
+        sensor = new TrainSensorImpl(null, null);
     }
 
     @Test
     public void ThisIsAnExampleTestStub() {
-        // TODO Delete this and add test cases based on the issues
+        Assert.assertEquals(sensor.getSpeedLimit(), 5);
     }
 }
