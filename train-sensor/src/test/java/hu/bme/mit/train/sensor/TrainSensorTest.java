@@ -1,6 +1,9 @@
 package hu.bme.mit.train.sensor;
 
+import hu.bme.mit.train.interfaces.TrainController;
 import hu.bme.mit.train.interfaces.TrainSensor;
+import hu.bme.mit.train.interfaces.TrainUser;
+import hu.bme.mit.train.user.TrainUserImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +12,37 @@ import static org.mockito.Mockito.*;
 public class TrainSensorTest {
 
     TrainSensor sensor;
+    TrainUser mockUser;
+    TrainController mockController;
 
     @Before
     public void before() {
-        sensor = new TrainSensorImpl(null, null);
+        mockUser = mock(TrainUser.class);
+        mockController = mock(TrainController.class);
+        sensor = new TrainSensorImpl(mockController, mockUser);
     }
 
     @Test
-    public void ThisIsAnExampleTestStub() {
-        Assert.assertEquals(sensor.getSpeedLimit(), 5);
+    public void NoAlarm(){
+        Assert.assertFalse(mockUser.getAlarmFlag());
+    }
+
+    @Test
+    public void AbsoluteMarginLow(){
+        sensor.overrideSpeedLimit(-10);
+        Assert.assertTrue(verify(mockUser.getAlarmFlag()));
+    }
+
+    @Test
+    public void AbsoluteMarginHigh(){
+        sensor.overrideSpeedLimit(501);
+        Assert.assertTrue(verify(mockUser.getAlarmFlag()));
+    }
+
+    @Test
+    public void RelaitveMargin(){
+        when(mockController.getReferenceSpeed()).thenReturn(150);
+        sensor.overrideSpeedLimit(50);
+        Assert.assertTrue(mockUser.getAlarmFlag());
     }
 }
