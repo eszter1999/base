@@ -30,19 +30,19 @@ public class TrainSensorTest {
     @Test
     public void AbsoluteMarginLow(){
         sensor.overrideSpeedLimit(-10);
-        Assert.assertTrue(verify(mockUser.getAlarmFlag()));
+        verify(mockUser, times(2)).setAlarmState(true);
     }
 
     @Test
     public void AbsoluteMarginHigh(){
         sensor.overrideSpeedLimit(501);
-        Assert.assertTrue(verify(mockUser.getAlarmFlag()));
+        verify(mockUser).setAlarmState(true);
     }
 
     @Test
     public void RelaitveMargin(){
         when(mockController.getReferenceSpeed()).thenReturn(150);
         sensor.overrideSpeedLimit(50);
-        Assert.assertTrue(mockUser.getAlarmFlag());
+        verify(mockUser).setAlarmState(true);
     }
 }
